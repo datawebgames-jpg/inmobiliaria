@@ -1,0 +1,30 @@
+<header>
+  <nav>
+    <h1>Vesta Habitat</h1>
+    <ul>
+      <li><a href="#ventas">Ventas</a></li>
+      <li><a href="#alquileres">Alquileres</a></li>
+      <li><a href="#publicar">Publicar</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <h2>Encuentra el lugar donde empieza tu historia</h2>
+    <div class="search-bar">
+      <input type="text" placeholder="¿Dónde quieres vivir?">
+      <select>
+        <option>Venta</option>
+        <option>Alquiler</option>
+      </select>
+      <button>Buscar</button>
+    </div>
+  </section>
+
+  <section id="featured">
+    <h3>Propiedades Destacadas</h3>
+    <div class="grid-propiedades">
+      </div>
+  </section>
+</main>

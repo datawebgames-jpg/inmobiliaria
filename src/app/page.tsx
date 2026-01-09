@@ -1,36 +1,63 @@
-import { supabase } from '@/lib/supabase'
+import { supabase } from '../lib/supabase';
+import Link from 'next/link';
 
 export default async function Home() {
-  // Consultamos las propiedades a Supabase
+  // Obtenemos las propiedades de Supabase
   const { data: propiedades, error } = await supabase
     .from('propiedades')
     .select('*')
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending: false });
 
-  if (error) return <div className="p-10 text-red-500">Error: {error.message}</div>
+  if (error) {
+    console.error("Error de Supabase:", error);
+  }
 
   return (
-    <main className="min-h-screen p-8 bg-gray-50">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8 text-gray-800">Propiedades en Vesta Habitat</h1>
+    <main className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <header className="bg-blue-600 py-16 px-6 text-center text-white">
+        <h1 className="text-5xl font-bold mb-4">Vesta Habitat</h1>
+        <p className="text-xl opacity-90 mb-8">Encuentra tu próximo hogar con nosotros</p>
+        <Link 
+          href="/publicar" 
+          className="bg-white text-blue-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition"
+        >
+          Publicar mi propiedad
+        </Link>
+      </header>
+
+      {/* Grid de Propiedades */}
+      <section className="max-w-6xl mx-auto py-12 px-6">
+        <h2 className="text-3xl font-bold text-gray-800 mb-8">Propiedades Destacadas</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {propiedades?.map((p) => (
-            <div key={p.id} className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
-              <img src={p.imagen_url} alt={p.titulo} className="h-48 w-full object-cover" />
-              <div className="p-4">
-                <h3 className="text-xl font-bold">{p.titulo}</h3>
-                <p className="text-blue-600 font-semibold text-lg">USD {p.precio}</p>
-                <p className="text-gray-500 text-sm mt-2 uppercase">{p.tipo}</p>
+            <div key={p.id} className="border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+              <div className="h-48 bg-gray-100">
+                <img 
+                  src={p.imagen_url || 'https://via.placeholder.com/400x300'} 
+                  alt={p.titulo}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-5">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs font-bold uppercase text-blue-500">{p.tipo}</span>
+                  <span className="text-xl font-bold text-gray-900">${Number(p.precio).toLocaleString()}</span>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-1">{p.titulo}</h3>
+                <p className="text-gray-500 text-sm">{p.ubicacion}</p>
               </div>
             </div>
           ))}
         </div>
 
-        {propiedades?.length === 0 && (
-          <p className="text-gray-500 mt-10">Todavía no hay propiedades. ¡Usa la página /publicar!</p>
+        {(!propiedades || propiedades.length === 0) && (
+          <div className="text-center py-20 border-2 border-dashed border-gray-100 rounded-3xl">
+            <p className="text-gray-400">Aún no hay propiedades cargadas. ¡Sé el primero!</p>
+          </div>
         )}
-      </div>
+      </section>
     </main>
-  )
+  );
 }
